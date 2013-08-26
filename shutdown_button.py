@@ -1,5 +1,18 @@
 #!/usr/bin/python
 
+# This script is used with an LED and a momentary button, perhaps the same,
+# like https://www.sparkfun.com/products/10440
+# The LED should be wired to GPIO pin 23 and the button to pin 24.
+# The idea is that it is run at startup (for example, from rc.local)
+# It turns the LED on to indicate that it's working, and then waits
+# for the user to hold down the button. When the script notices that
+# the user is holding down the button (which may take up to 5 seconds),
+# it starts flashing the LED to confirm. If the user continues to hold
+# the button down, the LED goes off and the shutdown sequence is triggered.
+# While the system is shutting down (which may take some time), the LED
+# does a triple flash. When it's finished shutting down, the LED will
+# turn off.
+
 import os
 import RPi.GPIO as GPIO
 from time import sleep
@@ -42,11 +55,12 @@ while not flag:
     else:
         sleep(5)
 
-# let the user know that the button press has been noted
+# let the user know that the button press has been noted by turning off the LED
 GPIO.output(LED, 0)
 os.system("shutdown -h now")
-sleep(3)
+sleep(5)
 
+# triple flash the LED
 while True:
     flashLED(.1)
     sleep(.1)
