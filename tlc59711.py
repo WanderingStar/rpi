@@ -1,18 +1,19 @@
 #!/usr/bin/python
 
 import sys
-import spi
-from bitstring import BitArray
+import spi                        # https://github.com/lthiery/SPI-Py
+from bitstring import BitArray    # https://pypi.python.org/pypi/bitstring
 
 class Tlc59711:
+    """Communicates with the TLC59711"""
     def __init__(self):
         self.outtmg = 1
         self.extgck = 0
         self.tmgrst = 1
         self.dsprpt = 1
         self.blank = 0
-        self.brightness = tuple([0b1111111] * 3)
-        self.pixels = [(0, 0, 0)] * 4
+        self.brightness = tuple([0b1111111] * 3)  # (R, G, B) brightness
+        self.pixels = [(0, 0, 0)] * 4             # (R, G, B) 0-3
 
     def command(self):
         """The bytes of the command that should update the data"""
