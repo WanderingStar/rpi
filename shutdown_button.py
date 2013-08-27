@@ -31,25 +31,25 @@ def flashLED(secs):
     sleep(secs)
     GPIO.output(LED, 1)
 
-flag = False
+shutdown = False
 count = 0
-while not flag:
-    # check to see if the button has been pushed
+while not shutdown:
+    # check to see if the button is pressed
     if GPIO.input(BUTTON):
-        # keep track of how many successive cycles the button has been pushed
+        # keep track of how many cycles the button has been pressed
         count += 1
         if count < 5:
-            # if the the button hasn't been held down long enough yet, flash the LED
+            # if it hasn't been pressed long enough yet, flash the LED
             flashLED(0.25)
         else:
-            # if the button has been held down long enough, trigger the shutdown
-            flag = True
+            # if it has been pressed long enough, trigger shutdown
+            shutdown = True
     # button is not pressed
     else:
         # reset the counter
         count = 0
 
-    # check infrequently until we notice that the button has been pressed
+    # check infrequently until we notice that the button is being pressed
     if count > 0:
         sleep(.25)
     else:
@@ -58,9 +58,9 @@ while not flag:
 # let the user know that the button press has been noted by turning off the LED
 GPIO.output(LED, 0)
 os.system("shutdown -h now")
-sleep(5)
+sleep(1)
 
-# triple flash the LED
+# triple flash the LED until the program is killed by system shutdown
 while True:
     flashLED(.1)
     sleep(.1)
